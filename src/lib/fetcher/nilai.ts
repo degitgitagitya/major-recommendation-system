@@ -36,6 +36,7 @@ export interface NilaiSiswaAttributes {
   updatedAt: Date;
   publishedAt: Date;
   atribut: string;
+  email: string;
 }
 
 export const getNilai = async (
