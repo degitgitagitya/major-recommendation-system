@@ -1,6 +1,7 @@
 import { getKriteria } from '@lib/fetcher/kriteria';
 import { getNilai, NilaiSiswa } from '@lib/fetcher/nilai';
 import { getNormalized } from '@lib/fetcher/normalisasi';
+import { addResult } from '@lib/fetcher/result';
 
 export const calculateTopsisNormalize = async () => {
   const { data: nilaiSiswa } = await getNilai({
@@ -57,19 +58,38 @@ export const calculateTopsisNormalize = async () => {
     };
   });
 
-  const normalizedWeightWithMinMax = {
+  const normalizedFinal = {
     PBiologi: await normalizedTopsisTimeWeight('PBiologi', normalizedTopsis),
-    // PIlmuKomputer: await normalizedTopsisTimeWeight(
-    //   'PIlmuKomputer',
-    //   normalizedTopsis
-    // ),
-    // PFisika: await normalizedTopsisTimeWeight('PFisika', normalizedTopsis),
-    // PKimia: await normalizedTopsisTimeWeight('PKimia', normalizedTopsis),
-    // PMatematika: await normalizedTopsisTimeWeight(
-    //   'PMatematika',
-    //   normalizedTopsis
-    // ),
+    PIlmuKomputer: await normalizedTopsisTimeWeight(
+      'PIlmuKomputer',
+      normalizedTopsis
+    ),
+    PFisika: await normalizedTopsisTimeWeight('PFisika', normalizedTopsis),
+    PKimia: await normalizedTopsisTimeWeight('PKimia', normalizedTopsis),
+    PMatematika: await normalizedTopsisTimeWeight(
+      'PMatematika',
+      normalizedTopsis
+    ),
   };
+
+  const finalData = normalizedFinal.PBiologi.ideals.map((item, index) => {
+    const nilaiSiswaObject = nilaiSiswa.find(
+      (nilai) => nilai.attributes.atribut === item.atribut
+    );
+
+    return {
+      ci_biologi: item.ideal,
+      ci_fisika: normalizedFinal.PFisika.ideals[index].ideal,
+      ci_kimia: normalizedFinal.PKimia.ideals[index].ideal,
+      ci_ilkom: normalizedFinal.PIlmuKomputer.ideals[index].ideal,
+      ci_matematika: normalizedFinal.PMatematika.ideals[index].ideal,
+      nilai_siswa: nilaiSiswaObject ? nilaiSiswaObject.id : 0,
+    };
+  });
+
+  const addResultPromises = await Promise.all(
+    finalData.map((item) => addResult(item))
+  );
 };
 
 export const normalizedTopsisTimeWeight = async (
@@ -123,27 +143,28 @@ export const normalizedTopsisTimeWeight = async (
 
   const minMax = findMinMax(normalizedWithWeight);
   const min = Object.entries(minMax.min).map(([key, value]) => value);
+  const max = Object.entries(minMax.max).map(([key, value]) => value);
 
   const s = normalizedWithWeight.map((item) => {
-    console.log(prodi);
-    console.log(item.attributes.atribut);
     const { biologi, fisika, kimia, matematika, indonesia, inggris } =
       item.attributes;
 
     const array = [biologi, fisika, kimia, matematika, indonesia, inggris];
 
-    console.log(min);
-
-    console.log(array);
-
     const sMin = vectorDistance(array, min);
+    const sMax = vectorDistance(array, max);
 
-    console.log(sMin);
-
-    return sMin;
+    return { sMin, sMax, atribut: item.attributes.atribut };
   });
 
-  return { normalizedWithWeight, minMax };
+  const ideals = s.map((item) => {
+    return {
+      ideal: item.sMin / (item.sMin + item.sMax),
+      atribut: item.atribut,
+    };
+  });
+
+  return { normalizedWithWeight, minMax, s, ideals };
 };
 
 const findMinMax = (data: NilaiSiswa[]) => {
