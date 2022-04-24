@@ -1,5 +1,5 @@
-import { Kriteria } from '@lib/fetcher/kriteria';
-import { Perbandingan } from '@lib/fetcher/perbandingan';
+import { Kriteria } from '@lib/fetcher/server/kriteria';
+import { Perbandingan } from '@lib/fetcher/server/perbandingan';
 
 export const calculateTotal = (
   data: Perbandingan[],

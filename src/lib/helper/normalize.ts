@@ -1,8 +1,8 @@
 import { matrix, multiply, transpose } from 'mathjs';
 import { calculateTotal } from './ahp';
-import { getPerbandingan } from '@lib/fetcher/perbandingan';
-import { getKriteria } from '@lib/fetcher/kriteria';
-import { addNormalized } from '@lib/fetcher/normalisasi';
+import { getPerbandingan } from '@lib/fetcher/server/perbandingan';
+import { getKriteria } from '@lib/fetcher/server/kriteria';
+import { addNormalized } from '@lib/fetcher/server/normalisasi';
 
 export const normalize = async (prodiName: string) => {
   const { data: dataKriteria } = await getKriteria({

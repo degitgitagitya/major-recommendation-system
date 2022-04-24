@@ -1,7 +1,7 @@
-import { getKriteria } from '@lib/fetcher/kriteria';
-import { getNilai, NilaiSiswa } from '@lib/fetcher/nilai';
-import { getNormalized } from '@lib/fetcher/normalisasi';
-import { addResult } from '@lib/fetcher/result';
+import { getKriteria } from '@lib/fetcher/server/kriteria';
+import { getNilai, NilaiSiswa } from '@lib/fetcher/server/nilai';
+import { getNormalized } from '@lib/fetcher/server/normalisasi';
+import { addResult } from '@lib/fetcher/server/result';
 
 export const calculateTopsisNormalize = async () => {
   const { data: nilaiSiswa } = await getNilai({

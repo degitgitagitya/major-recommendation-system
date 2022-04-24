@@ -70,3 +70,11 @@ export const resolveErrorClient = (
     };
   }
 };
+
+export const raiseError = (error: unknown | Error) => {
+  if (error instanceof Error) {
+    return error.message;
+  } else {
+    return 'Unknown error';
+  }
+};

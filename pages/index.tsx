@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import { Alert, Button, Card, TextField } from '@mui/material';
+import { Alert, Button, Card, Divider, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
@@ -53,8 +53,6 @@ const Home: NextPage = () => {
       } else {
         setLoginErrorMessage('Authentication error');
       }
-
-      console.log(signInResult);
     },
   });
 
@@ -84,8 +82,10 @@ const Home: NextPage = () => {
             }}
           >
             <Typography variant='h5' sx={{ textAlign: 'center' }}>
-              Application Name
+              Sign In
             </Typography>
+
+            <Divider variant='middle' />
 
             <TextField
               label='Email'
@@ -131,9 +131,30 @@ const Home: NextPage = () => {
               <Alert severity='error'>{loginErrorMessage}</Alert>
             )}
 
-            <Button type='submit' variant='contained'>
-              LOG IN
-            </Button>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <Button
+                type='submit'
+                variant='contained'
+                disabled={formik.isSubmitting}
+              >
+                Submit
+              </Button>
+
+              <Button
+                onClick={() => router.push('/register')}
+                variant='outlined'
+                disabled={formik.isSubmitting}
+              >
+                Register
+              </Button>
+            </Box>
           </Card>
         </form>
       </Box>

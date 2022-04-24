@@ -4,12 +4,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import router from 'next/router';
@@ -18,26 +16,34 @@ import BackdropLoading from '@components/BackdropLoading';
 
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
+import { Create, ExitToApp, Home } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
 interface LayoutProps {
   children: JSX.Element;
+  title: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { data: session, status } = useSession();
+const MENU_ITEMS = [
+  {
+    label: 'Dashboard',
+    icon: <Home />,
+    path: '/dashboard',
+  },
+  {
+    label: 'Input Nilai',
+    icon: <Create />,
+    path: '/grade',
+  },
+];
 
-  console.log(session);
+const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+  const { data: session, status } = useSession();
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (session) {
-      if (session.error === 'RefreshAccessTokenError') {
-        signOut({ callbackUrl: process.env.NEXT_PUBLIC_BASE_URL });
-      }
-    }
     if (session === null) {
       router.push(`/?redirect_url=${router.asPath}`);
     }
@@ -56,14 +62,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Toolbar />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        {MENU_ITEMS.map((item) => {
+          return (
+            <ListItem button onClick={() => router.push(item.path)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          );
+        })}
+
+        <Divider />
+
+        <ListItem
+          button
+          onClick={() =>
+            signOut({
+              callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+            })
+          }
+        >
+          <ListItemIcon>
+            <ExitToApp />
+          </ListItemIcon>
+          <ListItemText primary='Logout' />
+        </ListItem>
       </List>
     </div>
   );
@@ -78,18 +100,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            edge='start'
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box>
+            <IconButton
+              color='inherit'
+              aria-label='open drawer'
+              edge='start'
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant='h6' noWrap component='div'>
+              {title}
+            </Typography>
+          </Box>
+
           <Typography variant='h6' noWrap component='div'>
-            Responsive drawer
+            {session?.user?.email}
           </Typography>
         </Toolbar>
       </AppBar>

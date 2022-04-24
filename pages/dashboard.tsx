@@ -6,7 +6,7 @@ import type { NextPage } from 'next';
 
 const Dashboard: NextPage = () => {
   return (
-    <Layout>
+    <Layout title='Dashboard'>
       <>
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
