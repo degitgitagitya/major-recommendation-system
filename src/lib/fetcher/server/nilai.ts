@@ -24,6 +24,19 @@ export interface NilaiSiswa {
   attributes: NilaiSiswaAttributes;
 }
 
+export interface UsersPermissionsUser {
+  data: {
+    username: string;
+    email: string;
+    provider: string;
+    confirmed: boolean;
+    blocked: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    is_admin: boolean;
+  };
+}
+
 export interface NilaiSiswaAttributes {
   name: string;
   biologi: number;
@@ -37,6 +50,8 @@ export interface NilaiSiswaAttributes {
   publishedAt: Date;
   atribut: string;
   email: string;
+  result: unknown;
+  users_permissions_user: UsersPermissionsUser;
 }
 
 export const getNilai = async (

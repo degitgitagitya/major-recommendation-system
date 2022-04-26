@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 import { NilaiSiswa } from './nilai';
 import { resolvePromise } from '@lib/errorHandler/cms';
@@ -63,4 +64,41 @@ export const addResult = async (payload: {
   if (data) return data;
   if (error) throw Error(error.detail);
   throw Error('No message from sever');
+};
+
+export const getResults = async (
+  params: Record<string, any> | undefined = undefined
+) => {
+  const query = qs.stringify(params, { encodeValuesOnly: true });
+
+  const [data, error] = await resolvePromise<DataWithMeta<Result[]>>(
+    axios.get(`${process.env.CMS_URL}/api/results?${query}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.CMS_TOKEN}`,
+      },
+    })
+  );
+
+  if (data) return data;
+  if (error) throw Error(error.detail);
+  throw Error('No message from sever');
+};
+
+export const deleteAllResults = async () => {
+  const { data } = await getResults({
+    pagination: {
+      page: 1,
+      pageSize: 1000,
+    },
+  });
+
+  await Promise.all(
+    data.map((datum) => {
+      return axios.delete(`${process.env.CMS_URL}/api/results/${datum.id}`, {
+        headers: {
+          Authorization: `Bearer ${process.env.CMS_TOKEN}`,
+        },
+      });
+    })
+  );
 };

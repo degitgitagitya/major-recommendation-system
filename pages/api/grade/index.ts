@@ -49,11 +49,29 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
       res.json(data);
     }
   } else {
-    res.status(500).json({
-      code: 500,
-      detail: 'No data found',
-    });
+    const [data, error] = await resolvePromise(
+      axios.post(
+        `${process.env.CMS_URL}/api/nilai-siswas`,
+        {
+          data: {
+            ...req.body,
+            atribut: `R1`,
+            users_permissions_user: session?.user.sub,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CMS_TOKEN}`,
+          },
+        }
+      )
+    );
+
+    if (error) {
+      res.status(error.code).json(error);
+    } else {
+      res.json(data);
+    }
   }
 });
-
 export default handler;

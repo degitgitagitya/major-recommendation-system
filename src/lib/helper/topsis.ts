@@ -72,6 +72,8 @@ export const calculateTopsisNormalize = async () => {
     ),
   };
 
+  console.log(JSON.stringify(normalizedFinal));
+
   const finalData = normalizedFinal.PBiologi.ideals.map((item, index) => {
     const nilaiSiswaObject = nilaiSiswa.find(
       (nilai) => nilai.attributes.atribut === item.atribut

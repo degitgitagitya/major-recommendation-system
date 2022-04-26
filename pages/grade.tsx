@@ -1,16 +1,20 @@
 import Layout from '@components/Layout';
 import GradeInput from 'src/sections/grade-sections/Input';
+import AlreadyExist from 'src/sections/grade-sections/AlreadyExist';
+import useSWR from 'swr';
+import SuccessDialog from '@components/SuccessDialog';
 
 import { Button, Divider, Grid, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useCallback, useState } from 'react';
-import { addGrade } from '@lib/fetcher/client/grade';
+import { addGrade, getMyGrade } from '@lib/fetcher/client/grade';
+import { normalizeData } from '@lib/fetcher/client/normalizer';
+import { processTopsis } from '@lib/fetcher/client/topsis';
 
 import type { NextPage } from 'next';
-import useSWR from 'swr';
-import { getMyUser } from '@lib/fetcher/client/user';
 
 const Grade: NextPage = () => {
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [grade, setGrade] = useState({
@@ -32,105 +36,135 @@ const Grade: NextPage = () => {
     [setGrade]
   );
 
-  const { data } = useSWR('/api/user/my', getMyUser);
-
-  console.log(data);
+  const { data, mutate } = useSWR('/api/grade/my', getMyGrade, {
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const submitGrade = async () => {
     setIsLoading(true);
     try {
       await addGrade({ ...grade, name });
+      await normalizeData();
+      await processTopsis();
+      setOpen(true);
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
   };
 
+  const toggleDialog = (open: boolean) => {
+    setOpen(open);
+  };
+
   return (
-    <Layout title='Input Nilai'>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Box>
-          <Typography gutterBottom variant='h5'>
-            Data Diri
-          </Typography>
-          <Divider />
-        </Box>
+    <>
+      <SuccessDialog
+        open={open}
+        setOpen={toggleDialog}
+        callback={mutate}
+        title='Data Submitted'
+      />
 
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Typography sx={{ width: 200 }}>Nama</Typography>
-          <TextField
-            id='outlined-basic'
-            variant='outlined'
-            placeholder='John Doe'
-            value={name}
-            onChange={(event) => setName(event.target.value as string)}
-          />
-        </Box>
+      <Layout title='Input Nilai'>
+        {data ? (
+          <AlreadyExist />
+        ) : (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography gutterBottom variant='h5'>
+                Data Diri
+              </Typography>
+              <Divider />
+            </Box>
 
-        <Box>
-          <Typography gutterBottom variant='h5'>
-            Data Nilai
-          </Typography>
-          <Divider />
-        </Box>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              <Typography sx={{ width: 200 }}>Nama</Typography>
+              <TextField
+                id='outlined-basic'
+                variant='outlined'
+                placeholder='John Doe'
+                value={name}
+                onChange={(event) => setName(event.target.value as string)}
+              />
+            </Box>
 
-        <Grid container>
-          <Grid item xs={12} md={6} lg={2}></Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            Semester 1
-          </Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            Semester 2
-          </Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            Semester 3
-          </Grid>
-          <Grid item xs={12} md={6} lg={2}>
-            Semester 4
-          </Grid>
-        </Grid>
+            <Box>
+              <Typography gutterBottom variant='h5'>
+                Data Nilai
+              </Typography>
+              <Divider />
+            </Box>
 
-        <GradeInput
-          label='Nilai Biologi'
-          onChangeAverage={(average) => handleChangeAverage(average, 'biologi')}
-        />
-        <GradeInput
-          label='Nilai Fisika'
-          onChangeAverage={(average) => handleChangeAverage(average, 'fisika')}
-        />
-        <GradeInput
-          label='Nilai Kimia'
-          onChangeAverage={(average) => handleChangeAverage(average, 'kimia')}
-        />
-        <GradeInput
-          label='Nilai Matematika'
-          onChangeAverage={(average) =>
-            handleChangeAverage(average, 'matematika')
-          }
-        />
-        <GradeInput
-          label='Nilai Indonesia'
-          onChangeAverage={(average) =>
-            handleChangeAverage(average, 'indonesia')
-          }
-        />
-        <GradeInput
-          label='Nilai Inggris'
-          onChangeAverage={(average) => handleChangeAverage(average, 'inggris')}
-        />
+            <Grid container>
+              <Grid item xs={12} md={6} lg={2}></Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                Semester 1
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                Semester 2
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                Semester 3
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                Semester 4
+              </Grid>
+            </Grid>
 
-        <Box>
-          <Button
-            disabled={isLoading}
-            onClick={submitGrade}
-            variant='contained'
-            sx={{ mt: 2 }}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Box>
-    </Layout>
+            <GradeInput
+              label='Nilai Biologi'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'biologi')
+              }
+            />
+            <GradeInput
+              label='Nilai Fisika'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'fisika')
+              }
+            />
+            <GradeInput
+              label='Nilai Kimia'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'kimia')
+              }
+            />
+            <GradeInput
+              label='Nilai Matematika'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'matematika')
+              }
+            />
+            <GradeInput
+              label='Nilai Indonesia'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'indonesia')
+              }
+            />
+            <GradeInput
+              label='Nilai Inggris'
+              onChangeAverage={(average) =>
+                handleChangeAverage(average, 'inggris')
+              }
+            />
+
+            <Box>
+              <Button
+                disabled={isLoading}
+                onClick={submitGrade}
+                variant='contained'
+                sx={{ mt: 2 }}
+              >
+                Submit
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </Layout>
+    </>
   );
 };
 

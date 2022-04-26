@@ -10,12 +10,14 @@ interface SuccessDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   callback: () => void;
+  title: string;
 }
 
 const SuccessDialog: React.FC<SuccessDialogProps> = ({
   open,
   setOpen,
   callback,
+  title,
 }) => {
   const handleClose = () => {
     setOpen(false);
@@ -34,7 +36,7 @@ const SuccessDialog: React.FC<SuccessDialogProps> = ({
       </DialogTitle>
       <DialogContent>
         <DialogContentText id='registration-success-dialog-description'>
-          Registration successful!
+          {title}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

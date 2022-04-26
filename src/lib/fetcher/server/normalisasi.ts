@@ -104,3 +104,25 @@ export const getNormalized = async (
   if (error) throw Error(error.detail);
   throw Error('No message from sever');
 };
+
+export const deleteAllNormalized = async () => {
+  const { data } = await getNormalized({
+    pagination: {
+      page: 1,
+      pageSize: 1000,
+    },
+  });
+
+  await Promise.all(
+    data.map((norm) => {
+      return axios.delete(
+        `${process.env.CMS_URL}/api/normalisasis/${norm.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CMS_TOKEN}`,
+          },
+        }
+      );
+    })
+  );
+};

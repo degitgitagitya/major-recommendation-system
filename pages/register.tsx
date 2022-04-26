@@ -71,6 +71,7 @@ const Register: NextPage = () => {
         open={open}
         setOpen={toggleDialog}
         callback={() => router.push('/')}
+        title='Register Success'
       />
 
       <Box sx={{ width: '100vw', height: '100vh' }}>

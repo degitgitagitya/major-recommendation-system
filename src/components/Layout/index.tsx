@@ -16,7 +16,7 @@ import BackdropLoading from '@components/BackdropLoading';
 
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { Create, ExitToApp, Home } from '@mui/icons-material';
+import { Article, Create, ExitToApp, Home } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -35,6 +35,11 @@ const MENU_ITEMS = [
     label: 'Input Nilai',
     icon: <Create />,
     path: '/grade',
+  },
+  {
+    label: 'Hasil',
+    icon: <Article />,
+    path: '/result',
   },
 ];
 
@@ -64,7 +69,11 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
       <List>
         {MENU_ITEMS.map((item) => {
           return (
-            <ListItem button onClick={() => router.push(item.path)}>
+            <ListItem
+              button
+              onClick={() => router.push(item.path)}
+              key={item.path}
+            >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />
             </ListItem>
