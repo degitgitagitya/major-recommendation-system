@@ -112,6 +112,9 @@ const Grade: NextPage = () => {
               <Grid item xs={12} md={6} lg={2}>
                 Semester 4
               </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                Semester 5
+              </Grid>
             </Grid>
 
             <GradeInput

@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.2",
+    "@mui/x-data-grid": "^5.10.0",
     "axios": "^0.26.1",
     "formik": "^2.2.9",
     "mathjs": "^10.5.0",

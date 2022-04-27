@@ -1,5 +1,4 @@
 import nc from 'next-connect';
-import axios from 'axios';
 
 import { getSession } from 'next-auth/react';
 import { getNilai } from '@lib/fetcher/server/nilai';

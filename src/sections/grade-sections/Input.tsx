@@ -7,7 +7,7 @@ interface GradeInputProps {
 }
 
 const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
-  const [localGrade, setLocalGrade] = useState([0, 0, 0, 0]);
+  const [localGrade, setLocalGrade] = useState([0, 0, 0, 0, 0]);
 
   useEffect(() => {
     const average =
@@ -39,6 +39,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
               localGrade[1],
               localGrade[2],
               localGrade[3],
+              localGrade[4],
             ]);
           }}
         />
@@ -57,6 +58,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
               num ? num : 0,
               localGrade[2],
               localGrade[3],
+              localGrade[4],
             ]);
           }}
         />
@@ -75,6 +77,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
               localGrade[1],
               num ? num : 0,
               localGrade[3],
+              localGrade[4],
             ]);
           }}
         />
@@ -92,6 +95,26 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
               localGrade[0],
               localGrade[1],
               localGrade[2],
+              num ? num : 0,
+              localGrade[4],
+            ]);
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} md={6} lg={2}>
+        <TextField
+          id='outlined-basic'
+          variant='outlined'
+          placeholder='0'
+          value={localGrade[4]}
+          type='number'
+          onChange={(e) => {
+            const num = parseInt(e.target.value);
+            setLocalGrade([
+              localGrade[0],
+              localGrade[1],
+              localGrade[2],
+              localGrade[3],
               num ? num : 0,
             ]);
           }}
