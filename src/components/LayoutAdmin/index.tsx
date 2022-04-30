@@ -16,11 +16,11 @@ import BackdropLoading from '@components/BackdropLoading';
 
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { Article, Create, ExitToApp, Home } from '@mui/icons-material';
+import { AdminPanelSettings, ExitToApp, Home } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
-interface LayoutProps {
+interface LayoutAdminProps {
   children: JSX.Element;
   title: string;
 }
@@ -29,21 +29,16 @@ const MENU_ITEMS = [
   {
     label: 'Dashboard',
     icon: <Home />,
-    path: '/dashboard',
+    path: '/admin/dashboard',
   },
   {
-    label: 'Input Nilai',
-    icon: <Create />,
-    path: '/grade',
-  },
-  {
-    label: 'Hasil',
-    icon: <Article />,
-    path: '/result',
+    label: 'Parameter',
+    icon: <AdminPanelSettings />,
+    path: '/admin/parameter',
   },
 ];
 
-const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+const LayoutAdmin: React.FC<LayoutAdminProps> = ({ children, title }) => {
   const { data: session, status } = useSession();
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -52,8 +47,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     if (session === null) {
       router.push(`/?redirect_url=${router.asPath}`);
     }
-    if (session && session.user.role === 'admin') {
-      router.push('/admin/dashboard');
+    if (session && session.user.role === 'user') {
+      router.push('/dashboard');
     }
   }, [session, router]);
 
@@ -186,4 +181,4 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   );
 };
 
-export default Layout;
+export default LayoutAdmin;

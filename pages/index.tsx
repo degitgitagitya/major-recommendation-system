@@ -47,7 +47,7 @@ const Home: NextPage = () => {
           if (redirect_url) {
             router.push(`${redirect_url}`);
           } else {
-            router.push('/dashboard');
+            router.push('/redirect');
           }
         }
       } else {
