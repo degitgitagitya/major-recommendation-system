@@ -7,13 +7,19 @@ import SuccessDialog from '@components/SuccessDialog';
 import { Button, Divider, Grid, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useCallback, useState } from 'react';
-import { addGrade, getMyGrade } from '@lib/fetcher/client/grade';
+import { addGrade, getMyGrade, putGrade } from '@lib/fetcher/client/grade';
 import { normalizeData } from '@lib/fetcher/client/normalizer';
 import { processTopsis } from '@lib/fetcher/client/topsis';
+import { useRouter } from 'next/router';
 
 import type { NextPage } from 'next';
 
 const Grade: NextPage = () => {
+  const router = useRouter();
+
+  const { edit } = router.query;
+  const editFlag = edit ? Boolean(edit) : false;
+
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
@@ -55,9 +61,38 @@ const Grade: NextPage = () => {
     setIsLoading(false);
   };
 
+  const editGrade = async () => {
+    setIsLoading(true);
+    if (data) {
+      try {
+        await putGrade(data.id, {
+          ...grade,
+          name: data.attributes.name,
+        });
+        await normalizeData();
+        await processTopsis();
+        setOpen(true);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('no data');
+    }
+    setIsLoading(false);
+  };
+
   const toggleDialog = (open: boolean) => {
     setOpen(open);
+    editFlag && router.push('/grade');
   };
+
+  if (!data) {
+    return (
+      <Layout title='Input Nilai'>
+        <Typography variant='h5'>Loading..</Typography>
+      </Layout>
+    );
+  }
 
   return (
     <>
@@ -69,31 +104,35 @@ const Grade: NextPage = () => {
       />
 
       <Layout title='Input Nilai'>
-        {data ? (
+        {data && !editFlag ? (
           <AlreadyExist />
         ) : (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {!editFlag && (
+              <>
+                <Box>
+                  <Typography gutterBottom variant='h5'>
+                    Data Diri
+                  </Typography>
+                  <Divider />
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                  <Typography sx={{ width: 200 }}>Nama</Typography>
+                  <TextField
+                    id='outlined-basic'
+                    variant='outlined'
+                    placeholder='John Doe'
+                    value={name}
+                    onChange={(event) => setName(event.target.value as string)}
+                  />
+                </Box>
+              </>
+            )}
+
             <Box>
               <Typography gutterBottom variant='h5'>
-                Data Diri
-              </Typography>
-              <Divider />
-            </Box>
-
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-              <Typography sx={{ width: 200 }}>Nama</Typography>
-              <TextField
-                id='outlined-basic'
-                variant='outlined'
-                placeholder='John Doe'
-                value={name}
-                onChange={(event) => setName(event.target.value as string)}
-              />
-            </Box>
-
-            <Box>
-              <Typography gutterBottom variant='h5'>
-                Data Nilai
+                {editFlag ? 'Masukkan Ulang Nilai' : 'Data Nilai'}
               </Typography>
               <Divider />
             </Box>
@@ -157,7 +196,7 @@ const Grade: NextPage = () => {
             <Box>
               <Button
                 disabled={isLoading}
-                onClick={submitGrade}
+                onClick={editFlag ? editGrade : submitGrade}
                 variant='contained'
                 sx={{ mt: 2 }}
               >

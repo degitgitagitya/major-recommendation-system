@@ -33,7 +33,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
           value={localGrade[0]}
           type='number'
           onChange={(e) => {
-            const num = parseInt(e.target.value);
+            const num = parseFloat(e.target.value);
             setLocalGrade([
               num ? num : 0,
               localGrade[1],
@@ -52,7 +52,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
           value={localGrade[1]}
           type='number'
           onChange={(e) => {
-            const num = parseInt(e.target.value);
+            const num = parseFloat(e.target.value);
             setLocalGrade([
               localGrade[0],
               num ? num : 0,
@@ -71,7 +71,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
           value={localGrade[2]}
           type='number'
           onChange={(e) => {
-            const num = parseInt(e.target.value);
+            const num = parseFloat(e.target.value);
             setLocalGrade([
               localGrade[0],
               localGrade[1],
@@ -90,7 +90,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
           value={localGrade[3]}
           type='number'
           onChange={(e) => {
-            const num = parseInt(e.target.value);
+            const num = parseFloat(e.target.value);
             setLocalGrade([
               localGrade[0],
               localGrade[1],
@@ -109,7 +109,7 @@ const GradeInput: React.FC<GradeInputProps> = ({ label, onChangeAverage }) => {
           value={localGrade[4]}
           type='number'
           onChange={(e) => {
-            const num = parseInt(e.target.value);
+            const num = parseFloat(e.target.value);
             setLocalGrade([
               localGrade[0],
               localGrade[1],

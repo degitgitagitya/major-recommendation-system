@@ -32,8 +32,12 @@ const AlreadyExist: React.FC = () => {
           Hasil
         </Button>
 
-        <Button variant='outlined' startIcon={<EditIcon />}>
-          Edit
+        <Button
+          onClick={() => router.push('/grade?edit=true')}
+          variant='outlined'
+          startIcon={<EditIcon />}
+        >
+          Masukkan Ulang
         </Button>
       </Box>
     </Box>
