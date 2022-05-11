@@ -16,7 +16,12 @@ import BackdropLoading from '@components/BackdropLoading';
 
 import { useEffect, useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { AdminPanelSettings, ExitToApp, Home } from '@mui/icons-material';
+import {
+  AdminPanelSettings,
+  ExitToApp,
+  Home,
+  Keyboard,
+} from '@mui/icons-material';
 
 const drawerWidth = 240;
 
@@ -35,6 +40,11 @@ const MENU_ITEMS = [
     label: 'Parameter',
     icon: <AdminPanelSettings />,
     path: '/admin/parameter',
+  },
+  {
+    label: 'Input Nilai',
+    icon: <Keyboard />,
+    path: '/admin/input',
   },
 ];
 
