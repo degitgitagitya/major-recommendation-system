@@ -86,7 +86,7 @@ const Grade: NextPage = () => {
     editFlag && router.push('/grade');
   };
 
-  if (!data) {
+  if (data === undefined) {
     return (
       <Layout title='Input Nilai'>
         <Typography variant='h5'>Loading..</Typography>
