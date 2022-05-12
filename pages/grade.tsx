@@ -18,6 +18,7 @@ const Grade: NextPage = () => {
   const router = useRouter();
 
   const { edit } = router.query;
+
   const editFlag = edit ? Boolean(edit) : false;
 
   const [open, setOpen] = useState(false);

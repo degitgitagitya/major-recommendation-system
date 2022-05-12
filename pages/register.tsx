@@ -31,7 +31,7 @@ const Register: NextPage = () => {
       blocked: false,
       role: 2,
     },
-    validationSchema: Yup.object({
+    validationSchema: Yup.object().shape({
       username: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
