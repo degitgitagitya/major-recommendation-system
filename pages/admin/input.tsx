@@ -1,18 +1,32 @@
 import LayoutAdmin from '@components/LayoutAdmin';
-import ParameterTable from 'src/sections/parameter-sections/ParameterTable';
 import GradeTable from 'src/sections/input-sections/GradeTable';
 import InputToolbar from 'src/sections/input-sections/InputToolbar';
 
-import { Box, Typography, Divider } from '@mui/material';
+import { Box } from '@mui/material';
+import { useState } from 'react';
 
 import type { NextPage } from 'next';
 
+export interface TableState {
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
+}
+
 const Dashboard: NextPage = () => {
+  const [tableState, setTableState] = useState<TableState>({
+    pagination: {
+      page: 1,
+      pageSize: 10,
+    },
+  });
+
   return (
     <LayoutAdmin title='Input Nilai'>
       <Box>
-        <InputToolbar />
-        <GradeTable />
+        <InputToolbar tableState={tableState} />
+        <GradeTable tableState={tableState} setTableState={setTableState} />
       </Box>
     </LayoutAdmin>
   );

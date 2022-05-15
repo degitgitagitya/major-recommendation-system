@@ -26,7 +26,6 @@ export const resolvePromise = async <T>(
     const { data } = await promise;
     return [data, null] as const;
   } catch (error) {
-    console.log(JSON.stringify(error.response.data.message));
     if (error instanceof Error) {
       return [null, resolveError(error as AxiosError<CMSError>)] as const;
     } else if (axios.isCancel(error)) {

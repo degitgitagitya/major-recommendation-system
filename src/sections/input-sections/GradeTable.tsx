@@ -1,14 +1,23 @@
 import useSWR from 'swr';
 import qs from 'qs';
 
-import { useState } from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getAllGrade } from '@lib/fetcher/client/grade';
 
 import type { NilaiSiswa } from '@lib/fetcher/server/nilai';
+import type { TableState } from '@pages/admin/input';
 
 const columns: GridColDef<NilaiSiswa>[] = [
   { field: 'id', headerName: 'ID' },
+  {
+    field: 'nis',
+    headerName: 'NIS',
+    valueGetter: (params) => {
+      const { row } = params;
+      return row.attributes.nis;
+    },
+    width: 200,
+  },
   {
     field: 'name',
     headerName: 'Nama',
@@ -74,14 +83,15 @@ const columns: GridColDef<NilaiSiswa>[] = [
   },
 ];
 
-const GradeTable: React.FC = () => {
-  const [tableState, setTableState] = useState({
-    pagination: {
-      page: 1,
-      pageSize: 10,
-    },
-  });
+interface GradeTableProps {
+  tableState: TableState;
+  setTableState: React.Dispatch<React.SetStateAction<TableState>>;
+}
 
+const GradeTable: React.FC<GradeTableProps> = ({
+  tableState,
+  setTableState,
+}) => {
   const { data } = useSWR(
     () => {
       const query = qs.stringify(tableState, { encodeValuesOnly: true });

@@ -57,7 +57,6 @@ export const getAllGrade = async (
 
 interface AddGradeWithUserPayload {
   name: string;
-  email: string;
   nis: string;
   biologi: number;
   fisika: number;
@@ -68,8 +67,6 @@ interface AddGradeWithUserPayload {
 }
 
 export const addGradeWithUser = async (payload: AddGradeWithUserPayload) => {
-  console.log(payload);
-
   const [data, error] = await resolvePromise<unknown>(
     axios.post(`/api/grade/user`, payload)
   );

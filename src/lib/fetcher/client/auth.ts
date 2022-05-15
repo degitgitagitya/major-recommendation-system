@@ -20,7 +20,7 @@ export interface AuthResponse {
 }
 
 interface RegisterPayload {
-  username: string;
+  nis: string;
   email: string;
   password: string;
 }

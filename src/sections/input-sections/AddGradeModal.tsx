@@ -5,6 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import qs from 'qs';
 
 import { Add } from '@mui/icons-material';
 import { useFormik } from 'formik';
@@ -12,14 +13,22 @@ import { TextField } from '@mui/material';
 import { addGradeWithUser } from '@lib/fetcher/client/grade';
 import { normalizeData } from '@lib/fetcher/client/normalizer';
 import { processTopsis } from '@lib/fetcher/client/topsis';
+import { useSWRConfig } from 'swr';
 
-const AddGradeModal: React.FC = () => {
+import type { TableState } from '@pages/admin/input';
+
+interface AddGradeModalProps {
+  tableState: TableState;
+}
+
+const AddGradeModal: React.FC<AddGradeModalProps> = ({ tableState }) => {
+  const { mutate } = useSWRConfig();
+
   const [open, setOpen] = React.useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: '',
-      email: '',
       nis: '',
       biologi: 0,
       fisika: 0,
@@ -30,7 +39,6 @@ const AddGradeModal: React.FC = () => {
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required('Required'),
-      email: Yup.string().email().required('Required'),
       nis: Yup.string().required('Required'),
       biologi: Yup.number().required('Required'),
       fisika: Yup.number().required('Required'),
@@ -44,6 +52,8 @@ const AddGradeModal: React.FC = () => {
         await addGradeWithUser(values);
         await normalizeData();
         await processTopsis();
+        const query = qs.stringify(tableState, { encodeValuesOnly: true });
+        mutate(`/api/grade?${query}`);
         setOpen(false);
       } catch (error) {
         console.log(error);
@@ -93,26 +103,6 @@ const AddGradeModal: React.FC = () => {
                 formik.touched.name
                   ? formik.errors.name
                     ? formik.errors.name
-                    : ' '
-                  : ' '
-              }
-            />
-
-            <TextField
-              label='Email'
-              type='email'
-              variant='standard'
-              fullWidth
-              name='email'
-              id='email'
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={
-                formik.touched.email
-                  ? formik.errors.email
-                    ? formik.errors.email
                     : ' '
                   : ' '
               }

@@ -36,11 +36,11 @@ const MENU_ITEMS = [
     icon: <Home />,
     path: '/admin/dashboard',
   },
-  {
-    label: 'Parameter',
-    icon: <AdminPanelSettings />,
-    path: '/admin/parameter',
-  },
+  // {
+  //   label: 'Parameter',
+  //   icon: <AdminPanelSettings />,
+  //   path: '/admin/parameter',
+  // },
   {
     label: 'Input Nilai',
     icon: <Keyboard />,
@@ -58,7 +58,7 @@ const LayoutAdmin: React.FC<LayoutAdminProps> = ({ children, title }) => {
       router.push(`/?redirect_url=${router.asPath}`);
     }
     if (session && session.user.role === 'user') {
-      router.push('/dashboard');
+      router.push('/result');
     }
   }, [session, router]);
 

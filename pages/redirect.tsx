@@ -15,7 +15,7 @@ const Login: NextPage = () => {
       router.push('/admin/dashboard');
     }
     if (session && session.user.role === 'user') {
-      router.push('/dashboard');
+      router.push('/result');
     }
   }, [session, router]);
 

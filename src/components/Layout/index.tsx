@@ -26,16 +26,16 @@ interface LayoutProps {
 }
 
 const MENU_ITEMS = [
-  {
-    label: 'Dashboard',
-    icon: <Home />,
-    path: '/dashboard',
-  },
-  {
-    label: 'Input Nilai',
-    icon: <Create />,
-    path: '/grade',
-  },
+  // {
+  //   label: 'Dashboard',
+  //   icon: <Home />,
+  //   path: '/dashboard',
+  // },
+  // {
+  //   label: 'Input Nilai',
+  //   icon: <Create />,
+  //   path: '/grade',
+  // },
   {
     label: 'Hasil',
     icon: <Article />,

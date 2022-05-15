@@ -23,7 +23,7 @@ const Register: NextPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      nis: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -32,7 +32,7 @@ const Register: NextPage = () => {
       role: 2,
     },
     validationSchema: Yup.object().shape({
-      username: Yup.string().required('Required'),
+      nis: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
         .matches(
@@ -45,12 +45,12 @@ const Register: NextPage = () => {
         .required('Confirm again your password'),
     }),
     onSubmit: async (values) => {
-      const { email, username, password } = values;
+      const { email, nis, password } = values;
 
       try {
         await register({
           email,
-          username,
+          nis,
           password,
         });
         setOpen(true);
@@ -105,22 +105,20 @@ const Register: NextPage = () => {
               <Divider variant='middle' />
 
               <TextField
-                label='Username'
+                label='NIS'
                 type='text'
                 variant='standard'
                 fullWidth
-                name='username'
-                id='username'
+                name='nis'
+                id='nis'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.username}
-                error={
-                  formik.touched.username && Boolean(formik.errors.username)
-                }
+                value={formik.values.nis}
+                error={formik.touched.nis && Boolean(formik.errors.nis)}
                 helperText={
-                  formik.touched.username
-                    ? formik.errors.username
-                      ? formik.errors.username
+                  formik.touched.nis
+                    ? formik.errors.nis
+                      ? formik.errors.nis
                       : ' '
                     : ' '
                 }

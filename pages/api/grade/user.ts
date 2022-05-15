@@ -6,43 +6,9 @@ import { getNilai } from '@lib/fetcher/server/nilai';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  provider: string;
-  confirmed: boolean;
-  blocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  is_admin: boolean;
-}
-
-export interface RegisterUser {
-  jwt: string;
-  user: User;
-}
-
 const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
-  const {
-    name,
-    email,
-    nis,
-    biologi,
-    fisika,
-    kimia,
-    matematika,
-    indonesia,
-    inggris,
-  } = req.body;
-
-  const [userData] = await resolvePromise<RegisterUser>(
-    axios.post(`${process.env.CMS_URL}/api/auth/local/register`, {
-      username: nis,
-      email,
-      password: nis,
-    })
-  );
+  const { name, nis, biologi, fisika, kimia, matematika, indonesia, inggris } =
+    req.body;
 
   const { data: siswas } = await getNilai({
     sort: ['id:desc'],
@@ -64,6 +30,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
         {
           data: {
             name,
+            nis,
             biologi,
             fisika,
             kimia,
@@ -71,7 +38,6 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
             indonesia,
             inggris,
             atribut: `R${nextIteration}`,
-            users_permissions_user: userData?.user.id,
           },
         },
         {
@@ -93,6 +59,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
         {
           data: {
             name,
+            nis,
             biologi,
             fisika,
             kimia,
@@ -100,7 +67,6 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
             indonesia,
             inggris,
             atribut: `R1`,
-            users_permissions_user: userData?.user.id,
           },
         },
         {

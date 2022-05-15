@@ -39,6 +39,7 @@ export interface UsersPermissionsUser {
 
 export interface NilaiSiswaAttributes {
   name: string;
+  nis: string;
   biologi: number;
   fisika: number;
   kimia: number;
@@ -65,6 +66,31 @@ export const getNilai = async (
         Authorization: `Bearer ${process.env.CMS_TOKEN}`,
       },
     })
+  );
+
+  if (data) return data;
+  if (error) throw Error(error.detail);
+  throw Error('No message from sever');
+};
+
+export const appendUserToNilai = async (
+  id: number,
+  idUser: number | undefined
+) => {
+  const [data, error] = await resolvePromise(
+    axios.put(
+      `${process.env.CMS_URL}/api/nilai-siswas/${id}`,
+      {
+        data: {
+          users_permissions_user: idUser,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CMS_TOKEN}`,
+        },
+      }
+    )
   );
 
   if (data) return data;

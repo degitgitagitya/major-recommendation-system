@@ -3,16 +3,15 @@ import DataSection from 'src/sections/result-sections/DataSection';
 import MyResult from 'src/sections/result-sections/MyResult';
 
 import { GridColDef } from '@mui/x-data-grid';
+import { useState } from 'react';
+import { ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
-  Divider,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
-import { ExpandMore } from '@mui/icons-material';
 
 import type { Result } from '@lib/fetcher/client/result';
 import type { NextPage } from 'next';
@@ -63,7 +62,7 @@ const Result: NextPage = () => {
       <Box>
         <MyResult myRanking={myRanking} />
 
-        <Accordion>
+        <Accordion sx={{ display: 'none' }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls='panel1a-content'

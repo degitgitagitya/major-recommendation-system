@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, TextField, Typography } from '@mui/material';
+import { Box, Card, Divider, Grid, TextField, Typography } from '@mui/material';
 
 interface MyResultProps {
   myRanking: {
