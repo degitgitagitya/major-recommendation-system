@@ -109,7 +109,7 @@ export const deleteAllNormalized = async () => {
   const { data } = await getNormalized({
     pagination: {
       page: 1,
-      pageSize: 1000,
+      pageSize: 100,
     },
   });
 

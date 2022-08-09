@@ -88,7 +88,7 @@ export const deleteAllResults = async () => {
   const { data } = await getResults({
     pagination: {
       page: 1,
-      pageSize: 1000,
+      pageSize: 100,
     },
   });
 

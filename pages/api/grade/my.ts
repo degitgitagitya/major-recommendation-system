@@ -8,11 +8,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 const handler = nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
   const session = await getSession({ req });
   try {
+    console.log(session?.user.sub)
     const { data } = await getNilai({
       populate: '*',
       pagination: {
         page: 1,
-        pageSize: 1000,
+        pageSize: 100,
       },
       filters: {
         users_permissions_user: {

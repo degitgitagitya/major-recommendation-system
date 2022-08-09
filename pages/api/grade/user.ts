@@ -7,7 +7,7 @@ import { getNilai } from '@lib/fetcher/server/nilai';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
-  const { name, nis, biologi, fisika, kimia, matematika, indonesia, inggris } =
+  const { name, nis, biologi, fisika, kimia, matematika, indonesia, inggris, atribut } =
     req.body;
 
   const { data: siswas } = await getNilai({
@@ -37,7 +37,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
             matematika,
             indonesia,
             inggris,
-            atribut: `R${nextIteration}`,
+            atribut: atribut ?? `R${nextIteration}`,
           },
         },
         {
@@ -66,7 +66,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
             matematika,
             indonesia,
             inggris,
-            atribut: `R1`,
+            atribut: atribut ?? `R1`,
           },
         },
         {

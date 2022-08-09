@@ -7,7 +7,7 @@ export const calculateTopsisNormalize = async () => {
   const { data: nilaiSiswa } = await getNilai({
     pagination: {
       page: 1,
-      pageSize: 1000,
+      pageSize: 100,
     },
   });
 

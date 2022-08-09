@@ -63,6 +63,8 @@ const DataSection: React.FC<DataSectionProps> = ({
     },
   });
 
+  console.log(myGrade)
+
   useEffect(() => {
     if (data && myGrade) {
       const rank = data.data.findIndex((datum) => {
